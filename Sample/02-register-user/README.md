@@ -4,40 +4,45 @@
 A library that gives you access to the powerful Mesosfer cloud platform from your Android app. 
 For more information about Mesosfer and its features, see [Mesosfer Website][mesosfer.com] and [Mesosfer Documentations][docs].
 
-## Download
-1. Download [the latest AAR][library] and copy it on `libs` directory.
-2. Define in your `app` module `build.gradle` this code below before `dependencies`
+## Register User
+The first thing your app will do is probably ask the user to register. The following code illustrates a typical register:
 
-```groovy
-repositories{
-    flatDir {
-        dirs 'libs'
+```java
+// create new instance of Mesosfer User
+MesosferUser newUser = MesosferUser.createUser();
+
+// set default field
+newUser.setEmail("user.one@mesosfer.com");
+newUser.setPassword("user1234");
+newUser.setFirstName("User");
+newUser.setLastName("One");
+
+// set custom field
+newUser.setData("dateOfBirth", new Date());
+newUser.setData("height", 177.5);
+newUser.setData("weight", 78);
+newUser.setData("isMarried", true);
+newUser.setData("myObject", new JSONObject());
+newUser.setData("myArray", new JSONArray());
+
+// execute register user asynchronous
+newUser.registerAsync(new RegisterCallback() {
+    @Override
+    public void done(MesosferException e) {
+        // check if there is an exception happen
+        if (e != null) {
+            // handle the exception
+            return;
+        }
+        
+        // register succeeded
     }
-}
+});
 ```
 
-Then add this code below on `dependencies` :
+This call will `asynchronously` create a new user in your Mesosfer App. Before it does this, it checks to make sure that the `email` are unique. Also, it securely hashes the `password` in the cloud using bcrypt. We never store passwords in plaintext, nor will we ever transmit passwords back to the client in plaintext.
 
-```groovy
-compile 'com.eyro.mesosfer:MesosferSDK-Android:0.1.0@aar'
-```
-
-## Setup
-1. Register first to [Mesosfer Cloud][cloud]
-2. Create an application to get `applicationId` and `clientKey`
-3. Add this line below to your `Application` class to initialize Mesosfer SDK
-
-```java 
-Mesosfer.initialize(this, "YOUR-APPLICATION-ID-HERE", "YOUR-CLIENT-KEY-HERE");
-```
-Don't forget to initialize your application class to `AndroidManifest.xml`  
-
-(Optional) You can add some custom setup :
-
-* Enable Mesosfer SDK debug logging by calling `Mesosfer.setLogLevel(int);` before initialize SDK.
-* Mesosfer Log Level Mode : `LOG_LEVEL_VERBOSE`, `LOG_LEVEL_DEBUG`, `LOG_LEVEL_INFO`, `LOG_LEVEL_WARNING`, `LOG_LEVEL_ERROR`, `LOG_LEVEL_NONE`
-
-Everything is done!
+If a register isn’t successful, you should read the `MesosferException` that is returned. The most likely case is that the `email` has already been taken by another user. You should clearly communicate this to your users, and ask them try a different `email`.
 
 ## License
     Copyright (c) 2016, Mesosfer.
