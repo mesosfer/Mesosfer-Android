@@ -31,7 +31,7 @@ There are several ways to put constraints on the objects found by a `MesosferQue
 query.whereNotEqualTo("firstname", "John");
 ```
 
-You can give multiple constraints, and userss will only be in the results if they match all of the constraints. In other words, it’s like an AND of constraints.
+You can give multiple constraints, and users will only be in the results if they match all of the constraints. In other words, it’s like an AND of constraints.
 
 ```java
 query.whereNotEqualTo("firstname", "John");
@@ -108,7 +108,7 @@ query.whereEndsWith("email", "@okmail.com");
 The above example will match any `MesosferUser` where the value in the `email` String key ends with “@okmail.com”. For example, both “big.john@okmail.com” and “little.john@okmail.com” will match, but “john.doe@nomail.com” or “john.cena@nomail.com” will not.
 
 ## Counting
-If you just need to count how many objects match a query, but you do not need to retrieve all the objects that match, you can use `count` instead of `find`. For example, to count how many users have height greater than 170 centimetres:
+If you just need to count how many objects match a query, but you do not need to retrieve all the objects that match, you can use `count` instead of `find`. For example, to count how many users have `height` greater than 170 centimetres:
 
 ```java
 MesosferQuery<MesosferUser> query = MesosferUser.getQuery();
