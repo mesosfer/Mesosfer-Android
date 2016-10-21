@@ -34,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void handleUserList(View view) {
+        Intent intent = new Intent(this, UserListActivity.class);
+        startActivity(intent);
+    }
+
     public void handleLogout(View view) {
         loading.setMessage("Logging out...");
         loading.show();

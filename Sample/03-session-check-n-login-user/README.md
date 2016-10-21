@@ -21,7 +21,7 @@ if (user != null) {
 After you allow users to register, you need be able to let them login to their account in the future. To do this, you can use the class method `logInAsync`.
 
 ```java
-MesosferUser.logInAsync("myUsername", "myEncryptedPassword", new LogInCallback() {
+MesosferUser.logInAsync("myUsername", "myPlainPassword", new LogInCallback() {
     @Override
     public void done(MesosferUser user, MesosferException e) {
         // check if there is an exception happen

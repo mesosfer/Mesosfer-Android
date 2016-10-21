@@ -4,42 +4,61 @@
 A library that gives you access to the powerful Mesosfer cloud platform from your Android app. 
 For more information about Mesosfer and its features, see [Mesosfer Website][mesosfer.com] and [Mesosfer Documentations][docs].
 
-## Session User
-It would be bothersome if the user had to login every time they open your app. You can avoid this by using the cached `currentUser` object.
-
-Whenever you use any `register` or `login` methods, the user is cached on disk. You can treat this cache as a session, and automatically assume the user is logged in:
+## Fetch User
+If you need to fetch data on a current user with the latest data that is in the cloud, you can call the fetchAsync method like so:
 
 ```java
 MesosferUser user = MesosferUser.getCurrentUser();
-if (user != null) {
-    // user logged in, open main activity
-} else {
-    // session not found, open login activity
-}
-```
-## Log In User
-After you allow users to register, you need be able to let them login to their account in the future. To do this, you can use the class method `logInAsync`.
-
-```java
-MesosferUser.logInAsync("myUsername", "myEncryptedPassword", new LogInCallback() {
+user.fetchAsync(new GetCallback<MesosferUser>() {
     @Override
-    public void done(MesosferUser user, MesosferException e) {
+    public void done(MesosferUser mesosferUser, MesosferException e) {
         // check if there is an exception happen
         if (e != null) {
             // handle the exception
             return;
         }
         
-        // log in succeeded
+        // fetch user data succeeded
     }
 });
 ```
 
-## Log Out User
-You can clear the current user by logging them out:
+This will automatically update `currentUser` with the latest data from cloud.
+
+## Update User
+After logged in, you can update your data that stored in cloud using method `updateDataAsync`.
 
 ```java
-MesosferUser.logOutAsync(new LogOutCallback() {
+MesosferUser user = MesosferUser.getCurrentUser();
+// set default field
+user.setFirstName("updatedFirstname");
+user.setLastName("updatedLastname");
+// set custom field
+user.setData("dateOfBirth", new Date());
+user.setData("height", 180.5);
+user.setData("weight", 85);
+user.setData("isMarried", false);
+// execute update user
+user.updateDataAsync(new SaveCallback() {
+    @Override
+    public void done(MesosferException e) {
+        // check if there is an exception happen
+        if (e != null) {
+            // handle the exception
+            return;
+        }
+        
+        // update user data succeeded
+    }
+});
+```
+
+## Change Password
+If you want to change your current password, use method `changePasswordAsync`:
+
+```java
+MesosferUser user = MesosferUser.getCurrentUser();
+user.changePasswordAsync("oldPassword", "newPassword", new ChangePasswordCallback() {
     @Override
     public void done(MesosferException e) {
         // check if there is an exception happen
@@ -48,7 +67,7 @@ MesosferUser.logOutAsync(new LogOutCallback() {
             return;
         }
             
-        // log out succeeded
+        // change password succeeded
     }
 });
 ```
