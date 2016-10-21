@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Mesosfer</string>
     <string name="hint_email">Email Address</string>
-    <string name="login_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="hint_firstname">First Name</string>
     <string name="hint_lastname">Last Name</string>

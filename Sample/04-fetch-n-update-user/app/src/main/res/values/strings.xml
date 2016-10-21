@@ -12,4 +12,10 @@
     <string name="register">Register</string>
     <string name="login">Login</string>
     <string name="logout">Log Out</string>
+    <string name="profile">Profile</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="hint_password_old">Old Password</string>
+    <string name="hint_password_new">New Password</string>
+    <string name="hint_password_confirm">Confirm New Password</string>
+    <string name="change_password">Change Password</string>
 </resources>

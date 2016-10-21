@@ -1,6 +1,9 @@
 package com.eyro.mesosfer.sample;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Mesosfer Registration");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         // initialize input form view
@@ -133,8 +137,8 @@ public class RegisterActivity extends AppCompatActivity {
         newUser.setLastName(lastname);
         // set custom field
         newUser.setData("dateOfBirth", dateOfBirth);
-        newUser.setData("height", Double.parseDouble(height));
-        newUser.setData("weight", Integer.parseInt(weight));
+        newUser.setData("height", height);
+        newUser.setData("weight", weight);
         newUser.setData("isMarried", isMarried);
         // execute register user asynchronous
         newUser.registerAsync(new RegisterCallback() {
@@ -145,10 +149,10 @@ public class RegisterActivity extends AppCompatActivity {
 
                 // setup alert dialog builder
                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                builder.setNegativeButton(android.R.string.ok, null);
 
                 // check if there is an exception happen
                 if (e != null) {
+                    builder.setNegativeButton(android.R.string.ok, null);
                     builder.setTitle("Error Happen");
                     builder.setMessage(
                             String.format(Locale.getDefault(), "Error code: %d\nDescription: %s",
@@ -158,11 +162,24 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
+                builder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setResult(Activity.RESULT_OK, new Intent());
+                        finish();
+                    }
+                });
                 builder.setTitle("Register Succeeded");
                 builder.setMessage("Thank you for registering.");
                 dialog = builder.show();
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        super.onBackPressed();
+        return true;
     }
 
     @Override
