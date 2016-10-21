@@ -91,7 +91,7 @@ Use `whereStartsWith` to restrict to string values that start with a particular 
 
 ```java
 // Finds beacon's name that start with 'Beacon'.
-MesosferQuery<MesosferData> query = MesosferData.getQuery("Beacon);
+MesosferQuery<MesosferData> query = MesosferData.getQuery("Beacon");
 query.whereStartsWith("name", "Beacon");
 ```
 
@@ -101,7 +101,7 @@ Use `whereEndsWith` to restrict to string values that end with a particular stri
 
 ```java
 // Finds beacon's name that end with 'One'.
-MesosferQuery<MesosferData> query = MesosferData.getQuery("Beacon);
+MesosferQuery<MesosferData> query = MesosferData.getQuery("Beacon");
 query.whereEndsWith("name", "One");
 ```
 
@@ -111,7 +111,7 @@ The above example will match any `MesosferData` where the value in the `name` St
 If you just need to count how many datas match a query, but you do not need to retrieve all the datas that match, you can use `count` instead of `find`. For example, to count how many beacons have `major` greater than 123:
 
 ```java
-MesosferQuery<MesosferData> query = MesosferData.getQuery("Beacon);
+MesosferQuery<MesosferData> query = MesosferData.getQuery("Beacon");
 query.whereGreaterThan("major", 123);
 query.countAsync(new CountCallback<MesosferData>() {
     @Override
