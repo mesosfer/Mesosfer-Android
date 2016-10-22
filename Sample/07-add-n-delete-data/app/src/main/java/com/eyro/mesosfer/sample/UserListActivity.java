@@ -1,14 +1,17 @@
 package com.eyro.mesosfer.sample;
 
 import android.app.ProgressDialog;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.eyro.mesosfer.FindCallback;
-import com.eyro.mesosfer.MesosferData;
 import com.eyro.mesosfer.MesosferException;
 import com.eyro.mesosfer.MesosferQuery;
 import com.eyro.mesosfer.MesosferUser;
@@ -21,7 +24,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class DataActivity extends AppCompatActivity {
+public class UserListActivity extends AppCompatActivity {
+
+    private TextInputEditText textSearch;
     private ListView listview;
     private SimpleAdapter adapter;
 
@@ -35,13 +40,14 @@ public class DataActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_data);
+        setContentView(R.layout.activity_user_list);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Data Beacon List");
+            getSupportActionBar().setTitle("User List");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        textSearch = (TextInputEditText) findViewById(R.id.text_search);
         adapter = new SimpleAdapter(this, mapDataList, android.R.layout.simple_list_item_2, from, to);
         listview = (ListView) findViewById(R.id.listview);
         listview.setAdapter(adapter);
@@ -51,26 +57,34 @@ public class DataActivity extends AppCompatActivity {
         loading.setCancelable(false);
         loading.setCanceledOnTouchOutside(false);
 
-        updateAndShowDataList();
+        updateAndShowUserList(null);
     }
 
-    private void updateAndShowDataList() {
-        MesosferQuery<MesosferData> query = MesosferData.getQuery("Beacon");
+    public void handleSearch(View view) {
+        String searchString = textSearch.getText().toString();
+        updateAndShowUserList(searchString);
+    }
+
+    private void updateAndShowUserList(@Nullable String firstname) {
+        MesosferQuery<MesosferUser> query = MesosferUser.getQuery();
+        if (!TextUtils.isEmpty(firstname)) {
+            query.whereEqualTo("firstname", firstname);
+        }
 
         // showing a progress dialog loading
-        loading.setMessage("Querying beacon...");
+        loading.setMessage("Querying user...");
         loading.show();
 
-        query.findAsync(new FindCallback<MesosferData>() {
+        query.findAsync(new FindCallback<MesosferUser>() {
             @Override
-            public void done(List<MesosferData> list, MesosferException e) {
+            public void done(List<MesosferUser> list, MesosferException e) {
                 // hide progress dialog loading
                 loading.dismiss();
 
                 // check if there is an exception happen
                 if (e != null) {
                     // setup alert dialog builder
-                    AlertDialog.Builder builder = new AlertDialog.Builder(DataActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
                     builder.setNegativeButton(android.R.string.ok, null);
                     builder.setTitle("Error Happen");
                     builder.setMessage(
@@ -81,15 +95,15 @@ public class DataActivity extends AppCompatActivity {
                     return;
                 }
 
-                // clear all data list
+                // clear all user list
                 mapDataList.clear();
-                for (MesosferData data : list) {
+                for (MesosferUser user : list) {
                     Map<String, String> map = new HashMap<>();
-                    map.put("id", "ID : " + data.getObjectId());
+                    map.put("id", "ID : " + user.getObjectId());
                     try {
-                        map.put("data", data.toJSON().toString(4));
+                        map.put("data", user.toJSON().toString(4));
                     } catch (JSONException e1) {
-                        map.put("data", data.toJSON().toString());
+                        map.put("data", user.toJSON().toString());
                     }
                     mapDataList.add(map);
                 }
