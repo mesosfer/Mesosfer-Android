@@ -38,7 +38,7 @@ public class DataActivity extends AppCompatActivity implements AdapterView.OnIte
     private final List<Map<String, String>> mapDataList = new ArrayList<>();
     private static final int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
     private static final String[] from = new String[] { "id", "data" };
-    private static final String[] menu = new String[] { "Delete" };
+    private static final String[] menu = new String[] { "Delete", "Edit" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +157,15 @@ public class DataActivity extends AppCompatActivity implements AdapterView.OnIte
         dialog = builder.show();
     }
 
+    public void editBeacon(int position) {
+        final MesosferData data = listData.get(position);
+
+        Intent intent = new Intent(this, DataFormActivity.class);
+        intent.putExtra(DataFormActivity.INTENT_FORM_MODE, DataFormActivity.FORM_MODE_EDIT);
+        intent.putExtra(DataFormActivity.INTENT_OBJECT_ID, data.getObjectId());
+        startActivityForResult(intent, DataFormActivity.INTENT_REQUEST_CODE);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
         if (listData != null && !listData.isEmpty()) {
@@ -168,6 +177,8 @@ public class DataActivity extends AppCompatActivity implements AdapterView.OnIte
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == 0) {
                         deleteBeacon(position);
+                    } else if (which == 1) {
+                        editBeacon(position);
                     }
                 }
             });
