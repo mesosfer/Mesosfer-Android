@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Mesosfer</string>
+    <string name="hint_email">Email Address</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_firstname">First Name</string>
+    <string name="hint_lastname">Last Name</string>
+    <string name="hint_is_married">Already Married?</string>
+    <string name="hint_height">Height (cm)</string>
+    <string name="hint_weight">Weight (kg)</string>
+    <string name="hint_date_of_birth">Date of Birth (yyyy-mm-dd)</string>
+    <string name="welcome_to_mesosfer">Welcome to Mesosfer. You\'re logged in successfully.</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="logout">Log Out</string>
+</resources>

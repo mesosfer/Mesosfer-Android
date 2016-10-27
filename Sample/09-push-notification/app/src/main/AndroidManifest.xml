@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.eyro.mesosfer.sample">
+
+    <!--
+    IMPORTANT: Change "com.eyro.mesosfer.sample.permission.C2D_MESSAGE"
+    in the lines below to match your app's package name + ".permission.C2D_MESSAGE"
+    -->
+    <permission
+        android:protectionLevel="signature"
+        android:name="com.eyro.mesosfer.sample.permission.C2D_MESSAGE" />
+    <uses-permission
+        android:name="com.eyro.mesosfer.sample.permission.C2D_MESSAGE" />
+
+    <application
+        android:name=".MesosferApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!--
+        IMPORTANT: If you choose to subclass com.eyro.mesosfer.PushBroadcastReceiver,
+        be sure to replace that name with your class name in the registration
+        -->
+
+        <receiver android:name="com.eyro.mesosfer.PushBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.eyro.mesosfer.push.intent.RECEIVE" />
+                <action android:name="com.eyro.mesosfer.push.intent.DELETE" />
+                <action android:name="com.eyro.mesosfer.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.eyro.mesosfer.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <!--
+                IMPORTANT: Change "com.eyro.mesosfer.sample" to match your app's
+                package name.
+                -->
+                <category android:name="com.eyro.mesosfer.sample" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".RegisterActivity" />
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".UserListActivity" />
+        <activity android:name=".DataActivity" />
+        <activity android:name=".DataFormActivity"></activity>
+    </application>
+
+</manifest>
