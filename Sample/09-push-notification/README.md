@@ -20,7 +20,48 @@ When sending pushes to Android devices with GCM, there are several pieces of inf
 The Mesosfer Android SDK chooses a reasonable default configuration so that you do not have to worry about GCM registration ids, sender ids, or API keys. In particular, the SDK will automatically register your app for push at startup time using Mesosfer’s sender ID (523325046971) and will store the resulting registration ID in the deviceToken field of the app’s current `MesosferInstallation`.
 
 ## Receiving Pushes
-When a push notification is received, the “title” is displayed in the status bar and the “alert” is displayed alongside the “title” when the user expands the notification drawer. If you choose to subclass `com.eyro.mesosfer.PushBroadcastReceiver`, be sure to replace that name with your `class` name in the registration.
+When a push notification is received, the “title” is displayed in the status bar and the “alert” is displayed alongside the “title” when the user expands the notification drawer. 
+
+### USES PERMISSION
+```xml
+<permission
+    android:protectionLevel="signature"
+    android:name="com.eyro.mesosfer.sample.permission.C2D_MESSAGE" />
+<uses-permission
+    android:name="com.eyro.mesosfer.sample.permission.C2D_MESSAGE" />
+```
+
+**IMPORTANT!** Change `com.eyro.mesosfer.sample.permission.C2D_MESSAGE`
+in the lines above to match your app's package name + `.permission.C2D_MESSAGE`
+
+### RECEIVER
+
+```xml
+<receiver android:name="com.eyro.mesosfer.PushBroadcastReceiver"
+    android:exported="false">
+    <intent-filter>
+        <action android:name="com.eyro.mesosfer.push.intent.RECEIVE" />
+        <action android:name="com.eyro.mesosfer.push.intent.DELETE" />
+        <action android:name="com.eyro.mesosfer.push.intent.OPEN" />
+    </intent-filter>
+</receiver>
+
+<receiver android:name="com.eyro.mesosfer.GcmBroadcastReceiver"
+    android:permission="com.google.android.c2dm.permission.SEND">
+    <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+        <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+        <category android:name="com.eyro.mesosfer.sample" />
+    </intent-filter>
+</receiver>
+```
+
+**IMPORTANT!** 
+
+- If you choose to subclass `com.eyro.mesosfer.PushBroadcastReceiver`, be sure to replace that name with your `class` name in the registration.
+
+- Change `com.eyro.mesosfer.sample` in `category` tag to match your app's package name.
 
 Note that some Android emulators (the ones without Google API support) don’t support GCM, so if you test your app in an emulator make sure to select an emulator image that has Google APIs installed.
 
@@ -43,7 +84,7 @@ If your push has a unique context associated with an image, such as the avatar o
 
 ###RESPONDING WITH A CUSTOM ACTIVITY
 
-If your push has no “uri” parameter, `onPushOpen` will invoke your application’s launcher activity. To customize this behavior, you can override `getActivity` in your `PushBroadcastReceiver` subclass.
+If your push has no `uri` parameter, `onPushOpen` will invoke your application’s launcher activity. To customize this behavior, you can override `getActivity` in your `PushBroadcastReceiver` subclass.
 
 ###RESPONDING WITH A URI
 
